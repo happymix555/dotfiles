@@ -12,7 +12,7 @@ print( 'Configuring Wezterm...' )
 config.enable_wayland = false 
 
 -- choose window decoration style
-config.window_decorations = "NONE"
+config.window_decorations = "TITLE | RESIZE"
 
 -- disable tab
 config.enable_tab_bar = false 
@@ -25,7 +25,9 @@ config.font_size = 13
 config.window_background_opacity = 1.0
 
 -- blur background
-config.kde_window_background_blur = true
+-- uncomment one of those line when switch between macos and ubuntu
+-- config.kde_window_background_blur = true
+config.macos_window_background_blur = 90
 
 config.color_scheme = 'Everforest Light (Gogh)' 
 
