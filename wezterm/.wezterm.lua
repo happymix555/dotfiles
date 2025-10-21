@@ -18,7 +18,7 @@ config.window_decorations = "TITLE | RESIZE"
 config.enable_tab_bar = false 
 
 -- select font and font size
-config.font = wezterm.font("MesloLGS NF")
+config.font = wezterm.font("MesloLGS Nerd Font Mono")
 config.font_size = 17
 
 -- background opacity 
