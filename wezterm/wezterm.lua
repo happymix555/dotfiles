@@ -15,11 +15,11 @@ config.enable_wayland = false
 config.window_decorations = "TITLE | RESIZE"
 
 -- disable tab
-config.enable_tab_bar = true
+config.enable_tab_bar = false
 
 -- select font and font size
 config.font = wezterm.font("MesloLGS Nerd Font Mono")
-config.font_size = 17
+config.font_size = 19
 
 -- background opacity
 config.window_background_opacity = 1.0
@@ -27,7 +27,7 @@ config.window_background_opacity = 1.0
 -- blur background
 -- uncomment one of those line when switch between macos and ubuntu
 -- config.kde_window_background_blur = true
-config.macos_window_background_blur = 90
+-- config.macos_window_background_blur = 10
 
 config.color_scheme = "Everforest Light (Gogh)"
 
