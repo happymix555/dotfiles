@@ -67,7 +67,7 @@ return {
     opts = {
       indent = {
         char = "│",
-        tab_char = "│",
+        -- tab_char removed - use listchars setting instead
       },
       scope = {
         enabled = true,
