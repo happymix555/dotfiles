@@ -174,7 +174,7 @@ Alternatively, symlink files manually:
 ```bash
 ln -s "$(pwd)/nvim" ~/.config/nvim
 ln -s "$(pwd)/tmux/tmux.conf" ~/.tmux.conf
-ln -s "$(pwd)/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
+ln -s "$(pwd)/wezterm/wezterm.lua" ~/.wezterm.lua
 ln -s "$(pwd)/zsh/zshrc" ~/.zshrc
 ```
 

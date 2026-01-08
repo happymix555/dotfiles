@@ -65,7 +65,7 @@ create_symlink \
 # Install WezTerm config
 create_symlink \
     "$DOTFILES_DIR/wezterm/wezterm.lua" \
-    "$HOME/.config/wezterm/wezterm.lua" \
+    "$HOME/.wezterm.lua" \
     "WezTerm configuration"
 
 # Install zsh config
@@ -84,11 +84,12 @@ echo "  2. Open Neovim - LazyVim will auto-install plugins"
 echo "  3. Install tmux plugins: <prefix> + I (capital i) in tmux"
 echo ""
 echo "Dependencies to install (if not already installed):"
-echo "  • Homebrew packages:"
-echo "    - brew install powerlevel10k"
-echo "    - brew install zsh-autosuggestions"
-echo "    - brew install zsh-syntax-highlighting"
-echo "    - brew install eza"
-echo "  • Fonts: MesloLGS Nerd Font"
+echo "  • APT packages (Ubuntu):"
+echo "    - sudo apt update"
+echo "    - sudo apt install zsh-autosuggestions zsh-syntax-highlighting"
+echo "    - sudo apt install eza  # or use 'cargo install eza' if not available"
+echo "    - sudo apt install fonts-meslo-lg  # or install MesloLGS Nerd Font manually"
+echo "  • Powerlevel10k:"
+echo "    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k"
 echo "  • tmux Plugin Manager (TPM):"
 echo "    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"
