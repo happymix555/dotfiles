@@ -19,7 +19,7 @@ config.enable_tab_bar = false
 
 -- select font and font size
 config.font = wezterm.font("MesloLGS Nerd Font Mono")
-config.font_size = 17
+config.font_size = 15
 
 -- background opacity
 config.window_background_opacity = 1.0
