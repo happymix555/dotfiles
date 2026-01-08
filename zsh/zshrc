@@ -38,8 +38,7 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# add vscode to path so we can use command 'code' to open vscode from terminalsss
-export PATH="$PATH:/usr/bin/code"
+# VS Code command is already available via /usr/bin (no PATH modification needed)
 
 # zsh plugins (install via package manager)
 # Uncomment after installing: sudo apt install zsh-autosuggestions zsh-syntax-highlighting
@@ -48,3 +47,4 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ---- Eza (better ls) -----
 alias ls="eza --icons=always"
+export PATH="$HOME/.local/bin:$PATH"
