@@ -279,6 +279,51 @@ Then restart your terminal and tmux.
 
 ## Troubleshooting
 
+### Conda Initialization Fails
+
+**Important**: The `zsh/zshrc` file contains conda initialization code that points to a specific conda installation path. **Before using these dotfiles, verify your conda installation matches the path in the zshrc file.**
+
+Check which conda distribution you have installed:
+
+```bash
+# Check if you have miniconda
+ls ~/miniconda3/bin/conda
+
+# Check if you have anaconda
+ls ~/anaconda3/bin/conda
+```
+
+The zshrc file is currently configured for **anaconda3**. If you have **miniconda3** installed instead, you need to update the paths in `zsh/zshrc`:
+
+```bash
+# Edit the file and change all instances of 'anaconda3' to 'miniconda3'
+# Lines 28-35 in zsh/zshrc
+
+# From:
+__conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# ...
+if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
+    . "$HOME/anaconda3/etc/profile.d/conda.sh"
+else
+    export PATH="$HOME/anaconda3/bin:$PATH"
+fi
+
+# To:
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# ...
+if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+    . "$HOME/miniconda3/etc/profile.d/conda.sh"
+else
+    export PATH="$HOME/miniconda3/bin:$PATH"
+fi
+```
+
+After making changes, reload your shell:
+
+```bash
+source ~/.zshrc
+```
+
 ### Neovim Plugin Issues
 
 ```bash
