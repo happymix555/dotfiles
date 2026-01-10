@@ -17,3 +17,16 @@ vim.api.nvim_create_autocmd({ "FileType", "BufEnter", "BufWinEnter" }, {
     vim.bo.softtabstop = 2
   end,
 })
+
+-- Make window separators dark (set after colorscheme loads)
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#2e2e2e", bg = "NONE", bold = true })
+    vim.api.nvim_set_hl(0, "VertSplit", { fg = "#2e2e2e", bg = "NONE", bold = true })
+  end,
+})
+
+-- Apply separator color immediately on startup
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#2e2e2e", bg = "NONE", bold = true })
+vim.api.nvim_set_hl(0, "VertSplit", { fg = "#2e2e2e", bg = "NONE", bold = true })
