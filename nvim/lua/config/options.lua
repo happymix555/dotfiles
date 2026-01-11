@@ -16,3 +16,13 @@ vim.opt.smartindent = true -- Smart autoindenting when starting a new line
 -- Show whitespace characters (spaces and tabs)
 vim.opt.list = true
 vim.opt.listchars = { tab = "→ ", space = "·", trail = "•", nbsp = "␣" }
+
+-- Make window separators more visible with thinner lines
+vim.opt.fillchars = {
+	vert = "┃", -- Thick line vertical separator
+	vertleft = "┃",
+	vertright = "┃",
+	horiz = "━",
+	horizup = "┻",
+	horizdown = "┳",
+}
