@@ -4,6 +4,10 @@ local wezterm = require("wezterm")
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+-- Detect OS
+local is_macos = wezterm.target_triple:find("darwin") ~= nil
+local is_linux = wezterm.target_triple:find("linux") ~= nil
+
 -- This is where you actually apply your config choices
 print("Configuring Wezterm...")
 
@@ -11,23 +15,34 @@ print("Configuring Wezterm...")
 -- will make Wezterm missing titlebar and un-dragable by mouse
 config.enable_wayland = false
 
--- choose window decoration style
-config.window_decorations = "TITLE | RESIZE"
+-- choose window decoration style (OS-specific)
+if is_macos then
+	config.window_decorations = "TITLE | RESIZE"
+else
+	config.window_decorations = "TITLE"
+end
 
 -- disable tab
 config.enable_tab_bar = false
 
--- select font and font size
-config.font = wezterm.font("MesloLGS Nerd Font Mono")
-config.font_size = 15
+-- select font and font size (OS-specific)
+if is_macos then
+	config.font = wezterm.font("MesloLGS Nerd Font Mono")
+	config.font_size = 15
+else
+	config.font = wezterm.font("MesloLGS NF")
+	config.font_size = 9
+end
 
 -- background opacity
 config.window_background_opacity = 1.0
 
--- blur background
--- uncomment one of those line when switch between macos and ubuntu
--- config.kde_window_background_blur = true
--- config.macos_window_background_blur = 10
+-- blur background (OS-specific)
+if is_macos then
+	config.macos_window_background_blur = 10
+elseif is_linux then
+	config.kde_window_background_blur = true
+end
 
 config.color_scheme = "Everforest Light (Gogh)"
 

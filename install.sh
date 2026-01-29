@@ -6,12 +6,32 @@ set -e
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
+
+# Detect OS
+case "$(uname -s)" in
+    Darwin)
+        IS_MACOS=true
+        IS_LINUX=false
+        OS_NAME="macOS"
+        ;;
+    Linux)
+        IS_MACOS=false
+        IS_LINUX=true
+        OS_NAME="Linux"
+        ;;
+    *)
+        echo -e "${RED}Unsupported OS${NC}"
+        exit 1
+        ;;
+esac
 
 # Get the directory where this script is located
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo -e "${GREEN}Installing dotfiles from: ${DOTFILES_DIR}${NC}\n"
+echo -e "${GREEN}Installing dotfiles from: ${DOTFILES_DIR}${NC}"
+echo -e "${BLUE}Detected OS: ${OS_NAME}${NC}\n"
 
 # Function to create backup of existing file/directory
 backup_if_exists() {
@@ -62,11 +82,18 @@ create_symlink \
     "$HOME/.tmux.conf" \
     "tmux configuration"
 
-# Install WezTerm config
-create_symlink \
-    "$DOTFILES_DIR/wezterm/wezterm.lua" \
-    "$HOME/.config/wezterm/wezterm.lua" \
-    "WezTerm configuration"
+# Install WezTerm config (different location on Linux vs macOS)
+if [ "$IS_MACOS" = true ]; then
+    create_symlink \
+        "$DOTFILES_DIR/wezterm/wezterm.lua" \
+        "$HOME/.config/wezterm/wezterm.lua" \
+        "WezTerm configuration"
+else
+    create_symlink \
+        "$DOTFILES_DIR/wezterm/wezterm.lua" \
+        "$HOME/.wezterm.lua" \
+        "WezTerm configuration"
+fi
 
 # Install zsh config
 create_symlink \
@@ -75,7 +102,7 @@ create_symlink \
     "zsh configuration"
 
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}✓ Dotfiles installation complete!${NC}"
+echo -e "${GREEN}Dotfiles installation complete!${NC}"
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}\n"
 
 echo "Next steps:"
@@ -83,12 +110,28 @@ echo "  1. Restart your terminal or run: source ~/.zshrc"
 echo "  2. Open Neovim - LazyVim will auto-install plugins"
 echo "  3. Install tmux plugins: <prefix> + I (capital i) in tmux"
 echo ""
-echo "Dependencies to install (if not already installed):"
-echo "  • Homebrew packages:"
-echo "    - brew install powerlevel10k"
-echo "    - brew install zsh-autosuggestions"
-echo "    - brew install zsh-syntax-highlighting"
-echo "    - brew install eza"
-echo "  • Fonts: MesloLGS Nerd Font"
-echo "  • tmux Plugin Manager (TPM):"
+
+if [ "$IS_MACOS" = true ]; then
+    echo "Dependencies to install (macOS with Homebrew):"
+    echo "  brew install powerlevel10k zsh-autosuggestions zsh-syntax-highlighting eza"
+    echo ""
+    echo "  Fonts: Install MesloLGS Nerd Font from:"
+    echo "    https://github.com/romkatv/powerlevel10k#fonts"
+else
+    echo "Dependencies to install (Linux):"
+    echo "  # Powerlevel10k"
+    echo "  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k"
+    echo ""
+    echo "  # zsh plugins (Debian/Ubuntu)"
+    echo "  sudo apt install zsh-autosuggestions zsh-syntax-highlighting"
+    echo ""
+    echo "  # eza (better ls) - check your distro's package manager or use cargo"
+    echo "  sudo apt install eza  # or: cargo install eza"
+    echo ""
+    echo "  # Fonts: Install MesloLGS Nerd Font"
+    echo "  # Download from: https://github.com/romkatv/powerlevel10k#fonts"
+fi
+
+echo ""
+echo "  tmux Plugin Manager (TPM):"
 echo "    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm"

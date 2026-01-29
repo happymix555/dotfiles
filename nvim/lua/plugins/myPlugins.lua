@@ -168,4 +168,47 @@ return {
       return opts
     end,
   },
+
+  -- Disable markdownlint warnings
+  {
+    "mfussenegger/nvim-lint",
+    opts = function(_, opts)
+      -- Disable markdownlint for markdown files
+      opts.linters_by_ft = opts.linters_by_ft or {}
+      opts.linters_by_ft.markdown = {}
+
+      return opts
+    end,
+  },
+
+  -- Highlight word under cursor
+  {
+    "RRethy/vim-illuminate",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      delay = 200,
+      large_file_cutoff = 2000,
+    },
+  },
+
+  -- Python LSP with pyright - enable auto-imports from project subdirectories
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoImportCompletions = true,
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                diagnosticMode = "workspace", -- Analyze all files in workspace
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 }
