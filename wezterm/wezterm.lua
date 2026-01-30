@@ -31,7 +31,7 @@ if is_macos then
 	config.font_size = 15
 else
 	config.font = wezterm.font("MesloLGS NF")
-	config.font_size = 9
+	config.font_size = 11
 end
 
 -- background opacity
