@@ -30,3 +30,14 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 -- Apply separator color immediately on startup
 vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#2e2e2e", bg = "NONE", bold = true })
 vim.api.nvim_set_hl(0, "VertSplit", { fg = "#2e2e2e", bg = "NONE", bold = true })
+
+-- Auto-reload files when changed externally (useful for AI integrations)
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+  pattern = "*",
+  callback = function()
+    if vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
+    end
+  end,
+})
