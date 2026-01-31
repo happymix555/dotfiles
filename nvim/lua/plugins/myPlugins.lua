@@ -185,10 +185,12 @@ return {
   {
     "RRethy/vim-illuminate",
     event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      delay = 200,
-      large_file_cutoff = 2000,
-    },
+    config = function()
+      require("illuminate").configure({
+        delay = 200,
+        large_file_cutoff = 2000,
+      })
+    end,
   },
 
   -- Python LSP with pyright - enable auto-imports from project subdirectories
