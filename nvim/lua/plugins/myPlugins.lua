@@ -193,6 +193,13 @@ return {
     end,
   },
 
+  -- Smooth scrolling
+  {
+    "karb94/neoscroll.nvim",
+    event = "VeryLazy",
+    opts = {},
+  },
+
   -- Customize blink.cmp keybindings
   {
     "saghen/blink.cmp",
@@ -200,8 +207,8 @@ return {
       keymap = {
         -- Enter always inserts newline (don't accept suggestion)
         ["<CR>"] = {},
-        -- Ctrl+Enter accepts the suggestion
-        ["<C-CR>"] = { "accept", "fallback" },
+        -- Ctrl+y accepts the suggestion
+        ["<C-y>"] = { "accept", "fallback" },
       },
     },
   },
