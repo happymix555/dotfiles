@@ -193,6 +193,19 @@ return {
     end,
   },
 
+  -- Customize blink.cmp keybindings
+  {
+    "saghen/blink.cmp",
+    opts = {
+      keymap = {
+        -- Enter always inserts newline (don't accept suggestion)
+        ["<CR>"] = {},
+        -- Ctrl+Enter accepts the suggestion
+        ["<C-CR>"] = { "accept", "fallback" },
+      },
+    },
+  },
+
   -- Python LSP with pyright - enable auto-imports from project subdirectories
   {
     "neovim/nvim-lspconfig",
