@@ -193,13 +193,6 @@ return {
     end,
   },
 
-  -- Smooth scrolling
-  {
-    "karb94/neoscroll.nvim",
-    event = "VeryLazy",
-    opts = {},
-  },
-
   -- Customize blink.cmp keybindings
   {
     "saghen/blink.cmp",
@@ -213,23 +206,13 @@ return {
     },
   },
 
-  -- Python LSP with pyright - enable auto-imports from project subdirectories
+  -- Python LSP with jedi
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                autoImportCompletions = true,
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                diagnosticMode = "workspace", -- Analyze all files in workspace
-              },
-            },
-          },
-        },
+        pyright = { enabled = false },
+        jedi_language_server = {},
       },
     },
   },
