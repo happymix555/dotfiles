@@ -212,7 +212,17 @@ return {
     opts = {
       servers = {
         pyright = { enabled = false },
-        jedi_language_server = {},
+        jedi_language_server = {
+          init_options = {
+            completion = {
+              disableSnippets = false,
+              resolveEagerly = true,
+            },
+            diagnostics = {
+              enable = true,
+            },
+          },
+        },
       },
     },
   },
