@@ -5,3 +5,4 @@
 - has search across dir with big preview like in VSCode
 - can copy and paste to search with special character like '.', '(' etc without editing the seach word
 	to include '\'
+- change output color of 'fd' command
