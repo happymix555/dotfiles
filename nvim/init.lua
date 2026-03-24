@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -180,8 +180,8 @@ vim.diagnostic.config {
   underline = { severity = vim.diagnostic.severity.ERROR },
 
   -- Can switch between these as you prefer
-  virtual_text = true, -- Text shows up at the end of the line
-  virtual_lines = false, -- Text shows up underneath the line, with virtual lines
+  virtual_text = false, -- Text shows up at the end of the line
+  virtual_lines = true, -- Text shows up underneath the line, with virtual lines
 
   -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
   jump = { float = true },
@@ -217,6 +217,20 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+-- Delete current buffer
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>', { desc = '[B]uffer [D]elete' })
+
+-- Paste from yank register (register 0) - won't be overwritten by deletes.
+-- Useful when you want to paste the same yanked text multiple times.
+vim.keymap.set({ 'n', 'v' }, '<leader>p', '"0p', { desc = 'Paste from yank register' })
+vim.keymap.set({ 'n', 'v' }, '<leader>P', '"0P', { desc = 'Paste from yank register (before)' })
+
+-- Search for literal text - special characters like '.', '(', '\' are treated as-is, no regex.
+vim.keymap.set('n', '<leader>sl', function()
+  local input = vim.fn.input 'Literal search: '
+  if input ~= '' then vim.fn.feedkeys('/\\V' .. vim.fn.escape(input, '\\') .. '\n', 'n') end
+end, { desc = '[S]earch [L]iteral' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -316,6 +330,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
+        { '<leader>b', group = '[B]uffer' },
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
@@ -806,20 +821,32 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
+    opts = {
+      flavour = 'latte',
+      styles = {
+        comments = { 'italic' },
+        conditionals = { 'italic' },
+      },
+      integrations = {
+        blink_cmp = true,
+        gitsigns = true,
+        treesitter = true,
+        telescope = { enabled = true },
+        mason = true,
+        which_key = true,
+        mini = { enabled = true },
+      },
+    },
+    config = function(_, opts)
+      require('catppuccin').setup(opts)
 
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      -- any other, such as 'catppuccin-frappe', 'catppuccin-macchiato', or 'catppuccin-mocha'.
+      vim.cmd.colorscheme 'catppuccin-latte'
     end,
   },
 
@@ -865,8 +892,61 @@ require('lazy').setup({
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() return '%2l:%-2v' end
 
+      -- Show a prominent ● when the file has unsaved changes
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_filename = function()
+        local fname = vim.fn.expand '%:~:.'
+        if fname == '' then fname = '[No Name]' end
+        if vim.bo.modified then
+          return fname .. ' ●'
+        elseif vim.bo.readonly or not vim.bo.modifiable then
+          return fname .. ' [-]'
+        end
+        return fname
+      end
+
       -- ... and there is more!
       --  Check out: https://github.com/nvim-mini/mini.nvim
+    end,
+  },
+
+  { -- Jump anywhere in the visible code with 's' + label chars; also highlights 'f'/'t' targets
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    keys = {
+      { 's', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Flash Jump' },
+      { 'S', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Flash Treesitter' },
+      { 'r', mode = 'o', function() require('flash').remote() end, desc = 'Remote Flash' },
+      { 'R', mode = { 'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Treesitter Search' },
+    },
+  },
+
+  { -- Rainbow-colored indentation guides
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    config = function()
+      -- Define rainbow highlight groups optimized for catppuccin latte
+      local hooks = require 'ibl.hooks'
+      hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+        vim.api.nvim_set_hl(0, 'RainbowRed', { fg = '#D20F39' })
+        vim.api.nvim_set_hl(0, 'RainbowYellow', { fg = '#DF8E1D' })
+        vim.api.nvim_set_hl(0, 'RainbowBlue', { fg = '#1E66F5' })
+        vim.api.nvim_set_hl(0, 'RainbowOrange', { fg = '#FE640B' })
+        vim.api.nvim_set_hl(0, 'RainbowGreen', { fg = '#40A02B' })
+        vim.api.nvim_set_hl(0, 'RainbowViolet', { fg = '#8839EF' })
+        vim.api.nvim_set_hl(0, 'RainbowCyan', { fg = '#04A5E5' })
+      end)
+      require('ibl').setup {
+        indent = {
+          char = '│',
+          highlight = { 'RainbowRed', 'RainbowYellow', 'RainbowBlue', 'RainbowOrange', 'RainbowGreen', 'RainbowViolet', 'RainbowCyan' },
+        },
+        scope = { show_start = true, show_end = false },
+        exclude = {
+          filetypes = { 'help', 'dashboard', 'neo-tree', 'Trouble', 'trouble', 'lazy', 'mason', 'notify' },
+        },
+      }
     end,
   },
 

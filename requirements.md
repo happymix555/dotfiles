@@ -5,4 +5,10 @@
 - has search across dir with big preview like in VSCode
 - can copy and paste to search with special character like '.', '(' etc without editing the seach word
 	to include '\'
-- change output color of 'fd' command
+- relative line number
+- indicator to know whether or not the file was saved, change this to be more easy to spot.
+- how to delete the buffer?
+- hightlight when using 'f' or 's' command to jump cursor position
+- show tab and space character
+- rainbow indent with obvious line thickness to indicate indents
+- use catpuccin lathe color scheme
