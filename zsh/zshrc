@@ -1,0 +1,25 @@
+# ── History ───────────────────────────────────────────────────────────────────
+HISTSIZE=20000
+SAVEHIST=20000
+HISTFILE=~/.zsh_history
+setopt SHARE_HISTORY        # share history across all terminal sessions
+setopt HIST_IGNORE_DUPS     # don't save duplicate entries
+setopt HIST_IGNORE_SPACE    # don't save commands starting with a space
+
+# search history with up/down arrows based on what you've already typed
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+
+# ── Plugins ───────────────────────────────────────────────────────────────────
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# ── Conda ─────────────────────────────────────────────────────────────────────
+if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+    source "$HOME/miniconda3/etc/profile.d/conda.sh"
+elif [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
+    source "$HOME/anaconda3/etc/profile.d/conda.sh"
+fi
+
+# ── Prompt ────────────────────────────────────────────────────────────────────
+eval "$(starship init zsh)"

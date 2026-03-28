@@ -1,0 +1,51 @@
+# prompt layout: directory → git → env → newline → character
+format = """
+$directory$git_branch$git_status$conda$python$rust$c
+$character"""
+
+[directory]
+truncate_to_repo = false   # always show full path, not just repo root
+truncation_length = 0      # never truncate
+
+[git_branch]
+symbol = " "
+format = "on [$symbol$branch]($style) "
+style = "bold purple"
+
+[git_status]
+# shows each status type with a count so you know exactly what's pending
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
+untracked = "?${count}"    # files not tracked by git
+modified = "!${count}"     # changes not yet staged
+staged = "+${count}"       # staged but not committed
+deleted = "✘${count}"      # deleted files
+ahead = "⇡${count}"        # commits not pushed yet
+behind = "⇣${count}"       # commits on remote not pulled
+diverged = "⇡${ahead_count}⇣${behind_count}"
+
+[conda]
+symbol = " "
+format = "[$symbol$environment]($style) "
+style = "bold green"
+ignore_base = false         # show even when in base env
+
+[python]
+symbol = " "
+# only shows virtualenv name when a venv is active (not conda, that's above)
+format = 'via [$symbol$version(\($virtualenv\))]($style) '
+style = "bold yellow"
+
+[rust]
+symbol = " "
+format = "via [$symbol$version]($style) "
+style = "bold red"
+
+[c]
+symbol = " "
+format = "via [$symbol$version]($style) "
+style = "bold blue"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
