@@ -21,5 +21,10 @@ elif [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
     source "$HOME/anaconda3/etc/profile.d/conda.sh"
 fi
 
-# ── Prompt ────────────────────────────────────────────────────────────────────
+# ── Init Starship for Custom Prompt ────────────────────────────────────────────────────────────────────
+# this will shows addtional useful imformation like git branch, status, active env, etc.
 eval "$(starship init zsh)"
+
+# opencode
+# add opencode to PATH so that we can type 'opencode' in the terminal
+export PATH=/Users/happymix/.opencode/bin:$PATH

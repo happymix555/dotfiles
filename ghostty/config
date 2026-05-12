@@ -1,0 +1,52 @@
+# ── Font ──────────────────────────────────────────────────────────────────────
+
+# The font to use - JetBrainsMono Nerd Font includes thousands of icons
+# used by terminal tools like starship, nvim plugins, etc.
+font-family = JetBrainsMono Nerd Font
+
+# Starting font size - you can still adjust anytime with Cmd + and Cmd -
+font-size = 13
+
+# ── Theme ─────────────────────────────────────────────────────────────────────
+
+# Color theme for the terminal - Catppuccin Latte is a soft light theme
+# with warm, muted tones easy on sensitive eyes.
+# To browse all available themes run: ghostty +list-themes
+theme = Catppuccin Latte
+
+# ── Cursor ────────────────────────────────────────────────────────────────────
+
+# Cursor shape - block is the easiest to spot on screen
+cursor-style = block
+
+# Make the cursor blink so it is easier to find when you have not moved it
+cursor-style-blink = true
+
+# ── Mouse ─────────────────────────────────────────────────────────────────────
+
+# Hide the mouse pointer while you are typing so it does not cover your code
+mouse-hide-while-typing = true
+
+# Automatically copy any text you select with the mouse to the clipboard
+# so you do not need to press Cmd+C after selecting
+copy-on-select = clipboard
+
+# ── Window ────────────────────────────────────────────────────────────────────
+
+# Empty space between the text and the left and right edges of the window (pixels)
+window-padding-x = 5
+
+# Empty space between the text and the top and bottom edges of the window (pixels)
+window-padding-y = 5
+
+# Ask for confirmation before closing a window that still has a running process
+# so you do not accidentally kill a running server or ssh session
+confirm-close-surface = true
+
+# ── Shell Integration ─────────────────────────────────────────────────────────
+
+# Automatically detect which shell you are using and enable Ghostty's
+# shell integration. This unlocks extra features:
+# - Jump to the previous/next prompt with Cmd+Shift+Up / Cmd+Shift+Down
+# - Smarter text selection that understands command output boundaries
+shell-integration = detect

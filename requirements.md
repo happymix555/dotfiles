@@ -1,19 +1,8 @@
-- auto import when partially type show import suggestions from standard lib and other modules from the root dir that I open nvim, this should use the same language server 
-like VSCode
-- jump to definition
-- copy and paste multiple time without copy again
-- has nvim.flash to jump any where in the code
-- has search across dir with big preview like in VSCode
-- can copy and paste to search with special character like '.', '(' etc without editing the seach word to include '\'
-- relative line number
-- indicator to know whether or not the file was saved, change this to be more easy to spot.
-- how to delete the buffer?
-- hightlight when using 'f' or 's' command to jump cursor position
-- show tab and space character
-- rainbow indent with obvious line thickness to indicate indents
-- use catpuccin lathe color scheme
-- config to easily show number of searched word in a file, with the index of the current matched word, something like 2/10
-- default search everything to be just search NOT regex
-- make mouse cursor disappear if use keyboard to move cursor
-- cursor moving effect like we can track where the cursor is moving to
-- make cursor blink or make it easier to spot
+Zed requirements:
+	- user Pyrefly language server for python projects
+	- copy and paste multiple time without copy again in vim mode
+	- disable regex by default when searching
+	- relative line number
+	- rainbow indent
+	- use catpuccin lathe color scheme
+	- show status bar at the bottom of Zed like shown in Ubuntu version of Zed
