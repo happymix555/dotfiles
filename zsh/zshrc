@@ -1,3 +1,10 @@
+# ── Detect OS ─────────────────────────────────────────────────────────────────
+case "$(uname -s)" in
+    Darwin) OS="mac" ;;
+    Linux)  OS="linux" ;;
+    *)      OS="unknown"; echo "[.zshrc] WARNING: unrecognized OS '$(uname -s)'" ;;
+esac
+
 # ── History ───────────────────────────────────────────────────────────────────
 HISTSIZE=20000
 SAVEHIST=20000
@@ -5,26 +12,61 @@ HISTFILE=~/.zsh_history
 setopt SHARE_HISTORY        # share history across all terminal sessions
 setopt HIST_IGNORE_DUPS     # don't save duplicate entries
 setopt HIST_IGNORE_SPACE    # don't save commands starting with a space
-
 # search history with up/down arrows based on what you've already typed
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
 # ── Plugins ───────────────────────────────────────────────────────────────────
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# ── Conda ─────────────────────────────────────────────────────────────────────
-if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-    source "$HOME/miniconda3/etc/profile.d/conda.sh"
-elif [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
-    source "$HOME/anaconda3/etc/profile.d/conda.sh"
+if [[ "$OS" == "mac" ]]; then
+    if command -v brew &>/dev/null; then
+        BREW_PREFIX="$(brew --prefix)"
+        if [[ -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
+            source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+        else
+            echo "[.zshrc] ERROR: zsh-autosuggestions not found. Run: brew install zsh-autosuggestions"
+        fi
+        if [[ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]]; then
+            source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+        else
+            echo "[.zshrc] ERROR: zsh-syntax-highlighting not found. Run: brew install zsh-syntax-highlighting"
+        fi
+    else
+        echo "[.zshrc] ERROR: Homebrew not found. Install from https://brew.sh, then install zsh-autosuggestions and zsh-syntax-highlighting"
+    fi
+elif [[ "$OS" == "linux" ]]; then
+    if [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+        source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    else
+        echo "[.zshrc] ERROR: zsh-autosuggestions not found. Run: sudo apt install zsh-autosuggestions"
+    fi
+    if [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+        source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    else
+        echo "[.zshrc] ERROR: zsh-syntax-highlighting not found. Run: sudo apt install zsh-syntax-highlighting"
+    fi
 fi
 
-# ── Init Starship for Custom Prompt ────────────────────────────────────────────────────────────────────
-# this will shows addtional useful imformation like git branch, status, active env, etc.
-eval "$(starship init zsh)"
+# ── Conda ─────────────────────────────────────────────────────────────────────
+if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+    source "$HOME/miniconda3/etc/profile.d/conda.sh"
+elif [[ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]]; then
+    source "$HOME/anaconda3/etc/profile.d/conda.sh"
+else
+    echo "[.zshrc] WARNING: conda not found (checked ~/miniconda3 and ~/anaconda3). Install miniconda or anaconda if needed."
+fi
 
-# opencode
-# add opencode to PATH so that we can type 'opencode' in the terminal
-export PATH=/Users/happymix/.opencode/bin:$PATH
+# ── PATH ──────────────────────────────────────────────────────────────────────
+# opencode — add to PATH so we can type 'opencode' in the terminal
+if [[ -d "$HOME/.opencode/bin" ]]; then
+    export PATH="$HOME/.opencode/bin:$PATH"
+else
+    echo "[.zshrc] WARNING: opencode not found at ~/.opencode/bin. Install opencode or remove this block."
+fi
+
+# ── Init Starship for Custom Prompt ───────────────────────────────────────────
+# shows additional useful information like git branch, status, active env, etc.
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+else
+    echo "[.zshrc] ERROR: starship not found. Install from https://starship.rs or run: curl -sS https://starship.rs/install.sh | sh"
+fi
