@@ -12,9 +12,6 @@ HISTFILE=~/.zsh_history
 setopt SHARE_HISTORY        # share history across all terminal sessions
 setopt HIST_IGNORE_DUPS     # don't save duplicate entries
 setopt HIST_IGNORE_SPACE    # don't save commands starting with a space
-# search history with up/down arrows based on what you've already typed
-bindkey '^[[A' history-search-backward
-bindkey '^[[B' history-search-forward
 
 # ── Plugins ───────────────────────────────────────────────────────────────────
 if [[ "$OS" == "mac" ]]; then
@@ -70,3 +67,15 @@ if command -v starship &>/dev/null; then
 else
     echo "[.zshrc] ERROR: starship not found. Install from https://starship.rs or run: curl -sS https://starship.rs/install.sh | sh"
 fi
+
+# ── Key Bindings (must be last, after plugins) ────────────────────────────────
+# Force rebind after starship hooks fire
+function _rebind_arrows() {
+    bindkey '^[[A' history-beginning-search-backward
+    bindkey '^[[B' history-beginning-search-forward
+    # Ctrl + Left/Right to jump word by word
+    bindkey ';5D' backward-word
+    bindkey ';5C' forward-word
+}
+autoload -U add-zsh-hook
+add-zsh-hook precmd _rebind_arrows

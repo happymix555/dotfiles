@@ -1,9 +1,5 @@
 # ── Font ──────────────────────────────────────────────────────────────────────
 
-# The font to use - JetBrainsMono Nerd Font includes thousands of icons
-# used by terminal tools like starship, nvim plugins, etc.
-font-family = JetBrainsMono Nerd Font
-
 # Starting font size - you can still adjust anytime with Cmd + and Cmd -
 font-size = 13
 
@@ -50,3 +46,7 @@ confirm-close-surface = true
 # - Jump to the previous/next prompt with Cmd+Shift+Up / Cmd+Shift+Down
 # - Smarter text selection that understands command output boundaries
 shell-integration = detect
+
+# ── OS-specific overrides (font-family, etc.) ─────────────────────────────────
+# install.sh symlinks the correct config.mac or config.linux to config.local
+config-file = ~/.config/ghostty/config.local
