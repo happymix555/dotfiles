@@ -79,3 +79,7 @@ function _rebind_arrows() {
 }
 autoload -U add-zsh-hook
 add-zsh-hook precmd _rebind_arrows
+
+# ── uv ────────────────────────────────────────────────────────────────────────
+# adds ~/.local/bin to PATH so the uv command is available
+. "$HOME/.local/share/../bin/env"
