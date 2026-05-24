@@ -1,0 +1,42 @@
+{
+  // ── UI & Theme ──────────────────────────────────────────────────────────────
+  "diff_view_style": "unified",
+  "cli_default_open_behavior": "existing_window",
+  "base_keymap": "VSCode",
+  "theme": "Catppuccin Latte",
+
+  // ── Font ───────────────────────────────────────────────────────────────────
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_size": 13,
+  "ui_font_family": "JetBrainsMono Nerd Font",
+  "ui_font_size": 13,
+
+  // ── Editor ─────────────────────────────────────────────────────────────────
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware" // rainbow indent
+  },
+
+  // ── Search ─────────────────────────────────────────────────────────────────
+  // Note: Zed project search always opens as a multibuffer tab (not a side panel).
+  // There is no VSCode-style side panel layout for project search in Zed currently.
+  "search": {
+    "regex": false, // disable regex by default
+    "case_sensitive": false,
+    "whole_word": false
+  },
+
+  // ── Python / Pyrefly ───────────────────────────────────────────────────────
+  // Requires: install pyrefly extension from Zed extensions panel
+  // Requires: pip install pyrefly  OR  uv tool install pyrefly
+  "languages": {
+    "Python": {
+      "language_servers": ["pyrefly", "!pyright", "!pylsp", "!basedpyright"]
+    }
+  },
+  "lsp": {
+    "pyrefly": {
+      "settings": {}
+    }
+  }
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-shift-e": "project_panel::ToggleFocus",
+      "ctrl-shift-g": "git_panel::ToggleFocus",
+      "ctrl-shift-a": "agent::ToggleFocus",
+      "ctrl-`": "terminal_panel::Toggle",
+    },
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "ctrl-shift-e": "workspace::CloseActiveDock",
+    },
+  },
+  {
+    "context": "GitPanel",
+    "bindings": {
+      "ctrl-shift-g": "workspace::CloseActiveDock",
+    },
+  },
+  {
+    "context": "AgentPanel",
+    "bindings": {
+      "ctrl-shift-a": "workspace::CloseActiveDock",
+    },
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-`": "terminal_panel::Toggle",
+    },
+  },
+]
