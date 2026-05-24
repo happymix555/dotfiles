@@ -1,7 +1,7 @@
 {
   // ── UI & Theme ──────────────────────────────────────────────────────────────
   "diff_view_style": "unified",
-  "cli_default_open_behavior": "existing_window",
+  "cli_default_open_behavior": "new_window",
   "base_keymap": "VSCode",
   "theme": "Catppuccin Latte",
 
@@ -14,7 +14,7 @@
   // ── Editor ─────────────────────────────────────────────────────────────────
   "indent_guides": {
     "enabled": true,
-    "coloring": "indent_aware" // rainbow indent
+    "coloring": "indent_aware", // rainbow indent
   },
 
   // ── Search ─────────────────────────────────────────────────────────────────
@@ -23,7 +23,7 @@
   "search": {
     "regex": false, // disable regex by default
     "case_sensitive": false,
-    "whole_word": false
+    "whole_word": false,
   },
 
   // ── Python / Pyrefly ───────────────────────────────────────────────────────
@@ -31,12 +31,12 @@
   // Requires: pip install pyrefly  OR  uv tool install pyrefly
   "languages": {
     "Python": {
-      "language_servers": ["pyrefly", "!pyright", "!pylsp", "!basedpyright"]
-    }
+      "language_servers": ["pyrefly", "!pyright", "!pylsp", "!basedpyright"],
+    },
   },
   "lsp": {
     "pyrefly": {
-      "settings": {}
-    }
-  }
+      "settings": {},
+    },
+  },
 }
