@@ -19,9 +19,13 @@ esac
 mkdir -p "$HOME/.config"
 ln -sf "$DOTFILES/starship/starship.toml" "$HOME/.config/starship.toml"
 
-# Zed text editor
+# Zed
 mkdir -p "$HOME/.config/zed"
 ln -sf "$DOTFILES/zed/settings.json" "$HOME/.config/zed/settings.json"
-ln -sf "$DOTFILES/zed/keymap.json" "$HOME/.config/zed/keymap.json"
+
+case "$(uname -s)" in
+    Darwin) ln -sf "$DOTFILES/zed/keymap.mac.json" "$HOME/.config/zed/keymap.json" ;;
+    Linux)  ln -sf "$DOTFILES/zed/keymap.json"     "$HOME/.config/zed/keymap.json" ;;
+esac
 
 echo "Dotfiles linked."
