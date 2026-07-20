@@ -1,9 +1,22 @@
 {
   // ── UI & Theme ──────────────────────────────────────────────────────────────
+  "icon_theme": "Zed (Default)",
+  "ensure_final_newline_on_save": false,
+  "remove_trailing_whitespace_on_save": false,
+  "format_on_save": "off",
+  "hard_tabs": true,
+  "relative_line_numbers": "enabled",
+  "vim_mode": true,
+  "vim": {
+    "use_regex_search": false,
+    "use_smartcase_find": false,
+    "toggle_relative_line_numbers": false,
+  },
   "diff_view_style": "unified",
   "cli_default_open_behavior": "new_window",
   "base_keymap": "VSCode",
   "theme": "Catppuccin Latte",
+  "show_whitespaces": "all",
 
   // ── Font ───────────────────────────────────────────────────────────────────
   "buffer_font_family": "JetBrainsMono Nerd Font",
@@ -31,11 +44,15 @@
   // Requires: pip install pyrefly  OR  uv tool install pyrefly
   "languages": {
     "Python": {
-      "language_servers": ["pyrefly", "!pyright", "!pylsp", "!basedpyright"],
+      "language_servers": ["pyrefly", "ruff", "!pyright", "!pylsp", "!basedpyright"],
+      "extend_comment_on_newline": false
     },
   },
   "lsp": {
     "pyrefly": {
+      "settings": {},
+    },
+    "ruff": {
       "settings": {},
     },
   },
