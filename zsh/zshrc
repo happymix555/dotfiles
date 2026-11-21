@@ -1,0 +1,166 @@
+# ~/.zshrc  (managed by the dotfiles repo: zsh/zshrc, linked by install.sh)
+# Target: Ubuntu 24.04, GNOME Terminal, Doom Emacs.
+
+# ── PATH ──────────────────────────────────────────────────────────────────────
+# ~/.local/bin   : starship, uv, pip --user tools
+# ~/.config/emacs/bin : the `doom` command
+typeset -U path PATH            # keep PATH free of duplicates
+path=("$HOME/.local/bin" "$HOME/.config/emacs/bin" $path)
+export PATH
+
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+[[ -d "$ZSH_CACHE_DIR" ]] || mkdir -p "$ZSH_CACHE_DIR"
+
+# ── History ───────────────────────────────────────────────────────────────────
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt SHARE_HISTORY            # every open tab sees the same history
+setopt EXTENDED_HISTORY         # save timestamps
+setopt HIST_IGNORE_ALL_DUPS     # keep only the newest copy of a command
+setopt HIST_IGNORE_SPACE        # " secret-command" is not saved
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY              # `!!` expands first, Enter again to run
+
+# ── General behaviour ─────────────────────────────────────────────────────────
+setopt AUTO_CD                  # type a folder name to cd into it
+setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT   # `cd -<Tab>` lists recent dirs
+setopt INTERACTIVE_COMMENTS     # allow `# comments` at the prompt
+setopt NO_BEEP
+
+# ── Tab completion ────────────────────────────────────────────────────────────
+eval "$(dircolors -b)"          # LS_COLORS, reused to colour the completion menu
+autoload -Uz compinit
+compinit -d "$ZSH_CACHE_DIR/zcompdump"
+zmodload zsh/complist
+
+zstyle ':completion:*' menu select                       # arrow keys move through the menu
+zstyle ':completion:*' matcher-list \
+    'm:{a-zA-Z}={A-Za-z}' \
+    'r:|[._-]=* r:|=*' \
+    'l:|=* r:|=*'                                       # case-insensitive, then fuzzy-ish
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$ZSH_CACHE_DIR/compcache"
+setopt COMPLETE_IN_WORD ALWAYS_TO_END
+
+# ── Key bindings ──────────────────────────────────────────────────────────────
+bindkey -e                      # Emacs-style line editing (Ctrl+A, Ctrl+E, ...)
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'   # no "/" so Ctrl+Backspace deletes one path part
+
+# Up/Down: only walk history entries that start with what is already typed
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search      # Up
+bindkey '^[OA' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search    # Down
+bindkey '^[OB' down-line-or-beginning-search
+
+bindkey '^[[1;5D' backward-word         # Ctrl+Left
+bindkey '^[[1;5C' forward-word          # Ctrl+Right
+bindkey '^H'      backward-kill-word    # Ctrl+Backspace
+bindkey '^[[3;5~' kill-word             # Ctrl+Delete
+bindkey '^[[3~'   delete-char           # Delete
+bindkey '^[[H'    beginning-of-line     # Home
+bindkey '^[OH'    beginning-of-line
+bindkey '^[[F'    end-of-line           # End
+bindkey '^[OF'    end-of-line
+bindkey -M menuselect '^[[Z' reverse-menu-complete   # Shift+Tab in the menu
+
+# Ctrl+X Ctrl+E: edit the current command in $VISUAL (Emacs)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
+# ── Plugins (from apt) ────────────────────────────────────────────────────────
+_source_if() { [[ -r "$1" ]] && source "$1" || print -u2 "[.zshrc] missing $1 (run install.sh)"; }
+
+# Grey suggestion from history as you type: → or End accepts all, Ctrl+→ one word
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+_source_if /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+bindkey '^ ' autosuggest-accept         # Ctrl+Space also accepts
+
+# fzf: Ctrl+R history search, Ctrl+T insert a file path, Alt+C cd into a folder
+if command -v fzf >/dev/null; then
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+    if command -v fdfind >/dev/null; then
+        export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        export FZF_ALT_C_COMMAND='fdfind --type d --hidden --exclude .git'
+    fi
+    _source_if /usr/share/doc/fzf/examples/key-bindings.zsh
+    [[ -r /usr/share/doc/fzf/examples/completion.zsh ]] && source /usr/share/doc/fzf/examples/completion.zsh
+fi
+
+# zoxide: `z dot` jumps to the best-matching folder you have visited, `zi` picks with fzf
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+# ── Aliases ───────────────────────────────────────────────────────────────────
+if command -v eza >/dev/null; then
+    alias ls='eza --group-directories-first --icons'
+    alias ll='eza -lh --group-directories-first --icons --git'
+    alias la='eza -lah --group-directories-first --icons --git'
+    alias lt='eza --tree --level=2 --icons'
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -lh'
+    alias la='ls -lah'
+fi
+command -v batcat >/dev/null && alias bat='batcat'     # Ubuntu names it batcat
+command -v fdfind >/dev/null && alias fd='fdfind'      # Ubuntu names it fdfind
+alias grep='grep --color=auto'
+alias ..='cd ..'
+alias ...='cd ../..'
+
+# Coloured man pages through bat
+if command -v batcat >/dev/null; then
+    export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+    export MANROFFOPT='-c'
+fi
+
+# ── Emacs ─────────────────────────────────────────────────────────────────────
+# emacsclient talks to a running Emacs; ALTERNATE_EDITOR="" makes it start
+# `emacs --daemon` automatically the first time.
+if command -v emacsclient >/dev/null; then
+    export ALTERNATE_EDITOR=""
+    export EDITOR="emacsclient -t"       # opens inside this terminal
+    export VISUAL="emacsclient -c"       # opens a GUI window (git commit, Ctrl+X Ctrl+E)
+    alias e='emacsclient -n -r'          # `e file` opens it in Emacs, terminal stays free
+else
+    export EDITOR="nano" VISUAL="nano"
+fi
+
+# ── Prompt ────────────────────────────────────────────────────────────────────
+if command -v starship >/dev/null; then
+    eval "$(starship init zsh)"
+else
+    print -u2 "[.zshrc] starship not found (run install.sh)"
+fi
+
+# ── Doom Emacs terminal integration (only inside Emacs' vterm) ───────────────
+# Tells Emacs the shell's current folder after every command, so SPC . / dired /
+# magit open where you actually are. Must come after the prompt is set.
+if [[ "$INSIDE_EMACS" == vterm* ]]; then
+    vterm_printf() { printf '\e]%s\e\\' "$1" }
+    vterm_prompt_end() { vterm_printf "51;A$USER@$HOST:$PWD" }
+    setopt PROMPT_SUBST
+    PROMPT="$PROMPT"'%{$(vterm_prompt_end)%}'
+
+    # `vterm_cmd find-file README.md` runs an Emacs command from the shell
+    vterm_cmd() {
+        local elisp="" arg
+        for arg in "$@"; do
+            arg="${arg//\\/\\\\}"
+            elisp+="\"${arg//\"/\\\"}\" "
+        done
+        vterm_printf "51;E$elisp"
+    }
+    alias clear='vterm_printf "51;Evterm-clear-scrollback"; tput clear'
+fi
+
+# ── Syntax highlighting (must be sourced last) ────────────────────────────────
+_source_if /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+unfunction _source_if
