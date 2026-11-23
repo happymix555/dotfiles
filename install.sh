@@ -84,6 +84,9 @@ link() {
 step "Linking config files"
 link zsh/zshrc              "$HOME/.zshrc"
 link starship/starship.toml "$HOME/.config/starship.toml"
+# Your Doom config (init.el, config.el, packages.el). Linked before Doom is
+# installed below, so `doom install` uses it instead of generating a default.
+link doom                   "$HOME/.config/doom"
 
 # ── 6. Make zsh the login shell ───────────────────────────────────────────────
 ZSH_PATH="$(command -v zsh)"
@@ -97,7 +100,8 @@ fi
 
 # ── 7. Doom Emacs ─────────────────────────────────────────────────────────────
 if [[ -d "$HOME/.config/emacs" ]]; then
-    step "Doom Emacs already present in ~/.config/emacs"
+    step "Doom Emacs already present in ~/.config/emacs, syncing your config"
+    "$HOME/.config/emacs/bin/doom" sync
 else
     step "Installing Doom Emacs into ~/.config/emacs (takes a few minutes)"
     git clone --depth 1 https://github.com/doomemacs/doomemacs "$HOME/.config/emacs"
